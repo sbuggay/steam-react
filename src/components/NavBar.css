@@ -1,0 +1,21 @@
+#NavBar {
+    background-color: #171a21;
+    display: flex;
+    align-content: space-between;
+}
+#NavBar img {
+    padding-left: 40px;
+    align-self: center;
+}
+
+#NavBar a {
+    padding: 40px 20px;
+    color: #b8b6b4;
+    text-decoration: none;
+    align-self: center;
+    text-transform: uppercase;
+}
+
+#NavBar a:hover {
+    color: white;
+}
