@@ -17,7 +17,6 @@ class RecentGame extends React.Component<IRecentGame, any> {
     public getStyle(): React.CSSProperties {
         return {
             display: "flex",
-            
             height: "69px",
             alignContent: "space-between"
         }

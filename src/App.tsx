@@ -1,6 +1,6 @@
 import * as React from "react";
-import Profile from "./components/Profile/Profile";
-import Library from "./components/Library/Library";
+import Profile from "./modules/Profile/components/Profile";
+import Library from "./modules/Library/components/Library";
 
 import NavBar from "./components/NavBar";
 

@@ -12,13 +12,6 @@ export interface IGame {
 }
 
 class GameList extends React.Component<any, any> {
-    public getInitialState() {
-        return {
-            games: [],
-            selected: null
-        };
-    }
-
 
     public async componentDidMount() {
         const res = await fetch("http://localhost:8080/gameList/76561198020399899");
@@ -44,8 +37,12 @@ class GameList extends React.Component<any, any> {
 
             const gameItems = games.map((game: IGame, i: number) => {
                 return (
-                    <li key={i} onClick={e => this.handleOnClick(i)} style={{ backgroundColor: i === this.state.selected ? "blue" : "black" }}>
-                        <img src={`https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/${game.appid}/${game.img_icon_url}.jpg`} width="16px" height="16px" />
+                    <li key={i} onClick={e => this.handleOnClick(i)} style={{ backgroundColor: i === this.state.selected ? "#5d9bb7" : "#222" }}>
+                        {game.img_icon_url ?
+                            <img src={`https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/${game.appid}/${game.img_icon_url}.jpg`} width="16px" height="16px" />
+                        :
+                            <div></div>
+                        }
                         <span className="title"> {game.name} </span>
                     </li>
                 );
@@ -54,7 +51,9 @@ class GameList extends React.Component<any, any> {
             return (
                 <div id="Library">
                     <div id="GameList">
-                        {gameItems}
+                        <ul>
+                            {gameItems}
+                        </ul>
                     </div>
                     <div>
                         {this.state.selected ? <GameDetail game={this.state.games[this.state.selected]} /> : null}
