@@ -1,32 +1,5 @@
 import * as React from "react";
 
-export interface IRecentNewsProps {
-    appid: number;
-}
-
-export interface INewsItem {
-    gid: string,
-    title: string,
-    url: string,
-    author: string,
-    contents: string,
-    feedlabel: string,
-    date: number,
-    feedname: string,
-    feed_type: number,
-    app_id: number
-}
-
-interface INewsItems extends Array<INewsItem> { };
-
-export interface IRecentNewsState {
-    appid: number;
-    appnews?: {
-        appid: number;
-        newsitems: INewsItems,
-        count: number;
-    }
-}
 
 class RecentNews extends React.Component<IRecentNewsProps, IRecentNewsState> {
 
@@ -36,7 +9,7 @@ class RecentNews extends React.Component<IRecentNewsProps, IRecentNewsState> {
         }
     }
 
-    public state = {
+    public state: IRecentNewsState = {
         appid: 0,
         appnews: {
             appid: 0,
@@ -54,7 +27,7 @@ class RecentNews extends React.Component<IRecentNewsProps, IRecentNewsState> {
 
     public render() {
         if (this.state.appnews) {
-            const recentNewsItems = this.state.appnews.newsitems.map((item: INewsItem, i) => {
+            const recentNewsItems = this.state.appnews.newsitems.map((item, i) => {
                 return (
                     <div key={i} style={{ paddingBottom: "10px" }}>
                         <div>{item.title}</div>
