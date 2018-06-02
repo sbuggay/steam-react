@@ -1,13 +1,17 @@
 import * as React from "react";
-import Profile from "./components/Profile/Profile";
-import Library from "./components/Library/Library";
-
-import NavBar from "./components/NavBar";
 
 import { Route } from "react-router-dom";
 import { ConnectedRouter } from "react-router-redux";
-
 import { Provider } from "react-redux";
+
+import Store from "./components/Store/Store";
+import Profile from "./components/Profile/Profile";
+import Library from "./components/Library/Library";
+import Community from "./components/Community/Community";
+import About from "./components/About/About";
+
+import NavBar from "./components/NavBar";
+
 import store, { history } from "./redux/configureStore";
 
 class App extends React.Component<any, any> {
@@ -24,8 +28,11 @@ class App extends React.Component<any, any> {
         <ConnectedRouter history={history}>
           <div style={this.getStyle()}>
             <NavBar />
+            <Route path="/store" component={Store} />
             <Route path="/profile" component={Profile} />
             <Route path="/library" component={Library} />
+            <Route path="/community" component={Community} />
+            <Route path="/about" component={About} />
           </div>
         </ConnectedRouter>
       </Provider>
