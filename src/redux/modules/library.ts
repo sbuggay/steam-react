@@ -1,3 +1,4 @@
+import { put, takeLatest, call, select } from 'redux-saga/effects'
 interface INewsItem {
     gid: string;
     title: string;
@@ -36,63 +37,92 @@ interface IGame {
 }
 
 export interface ILibraryState {
+    loading: boolean;
     gameList: IGame[];
+    gameDetail: any;
+    selected: number;
+    selectedId: string;
 }
 
-const LOAD_GAME_LIST = "LOAD_GAME_LIST";
+export const LOAD_GAME_LIST = "LOAD_GAME_LIST";
+export const LOAD_GAME_LIST_SUCCESS = "LOAD_GAME_LIST_SUCCESS";
+export const LOAD_GAME_LIST_FAILURE = "LOAD_GAME_LIST_FAILURE";
 
-export function loadGameList(steamid: string){
-  return {
-    type: LIST_ITEM_CLICK,
-    index
-  }
+export const SELECT_GAME = "SELECT_GAME";
+
+export const LOAD_GAME_DETAIL = "LOAD_GAME_DETAIL";
+export const LOAD_GAME_DETAIL_SUCCESS = "LOAD_GAME_DETAIL";
+export const LOAD_GAME_DETAIL_FAILURE = "LOAD_GAME_DETAIL";
+
+export function* loadGameList(action: any) {
+    try {
+        const response = yield call(fetch, `http://localhost:8080/gameList/${action.payload}`);
+        const json = yield call([response, "json"]);
+        const games = json.response.games.sort((a: IGame, b: IGame) => (a.name <= b.name) ? -1 : 1);
+        yield put({ type: LOAD_GAME_LIST_SUCCESS, payload: games });
+    } catch (e) {
+        yield put({ type: LOAD_GAME_LIST_FAILURE });
+    }
+}
+
+export function* loadGameDetail(action: any) {
+    try {
+        const state = yield select(); 
+        const appid = state.library.gameList[state.library.selected].appid;
+        const newsResponse = yield call(fetch, `http://localhost:8080/steamNews/${appid}`);
+        const news = yield call([newsResponse, "json"]);
+        const achievementsResponse = yield call(fetch, `http://localhost:8080/achievements/76561198020399899?appid=${appid}`);
+        const achievements = yield achievementsResponse.json();
+        console.log(news, achievements);
+        yield put({ type: LOAD_GAME_DETAIL_SUCCESS, payload: news.appnews });
+    } catch (e) {
+        yield put({ type: LOAD_GAME_DETAIL_FAILURE });
+    }
+}
+
+export function* loadGameSaga() {
+    yield takeLatest(LOAD_GAME_LIST, loadGameList);
+}
+
+export function* loadGameDetailSaga() {
+    yield takeLatest(SELECT_GAME, loadGameDetail);
 }
 
 const initialState: ILibraryState = {
-
+    loading: false,
+    gameList: [],
+    gameDetail: {},
+    selected: -1,
+    selectedId: ""
 };
 
-export default function reducer(state = initialState, action){
-  switch (action.type){
-  case INPUT_SUBMIT:
-    return Object.assign(
-      {},
-      state,
-      {
-        list: [...state.list, {item: state.newToDo, done: false }],
-        newToDo: ''
-      }
-    );
-  case INPUT_CHANGED:
-    return Object.assign(
-      {},
-      state,
-      {newToDo: action.value}
-    );
-  case LIST_ITEM_CLICK:
-    return Object.assign(
-      {},
-      state,
-      {
-        list: [
-          ...state.list.slice(0, action.index),
-          Object.assign({}, state.list[action.index], {done: !state.list[action.index].done}),
-          ...state.list.slice(action.index+1)
-        ]
-      }
-    );
-  case DELETE_LIST_ITEM:
-    return Object.assign(
-      {},
-      state,
-      {
-        list: [
-          ...state.list.slice(0, action.index),
-          ...state.list.slice(action.index+1)
-        ]
-      }
-    );
-  default:
-    return state;
-  }
+export default function reducer(state = initialState, action: any) {
+    switch (action.type) {
+        case LOAD_GAME_LIST:
+            return Object.assign({}, state, {
+                loading: true,
+                gameList: []
+            });
+        case LOAD_GAME_LIST_SUCCESS:
+            return Object.assign({}, state, {
+                gameList: action.payload
+            });
+        case LOAD_GAME_LIST_FAILURE:
+            return Object.assign({}, state, {
+                gameList: []
+            });
+        case SELECT_GAME:
+            return Object.assign({}, state, {
+                selected: action.payload
+            });
+        case LOAD_GAME_DETAIL_SUCCESS:
+            return Object.assign({}, state, {
+                gameDetail: Object.assign({}, state.gameDetail, {
+                    [action.payload.appid]: action.payload.newsitems
+                })
+            });
+
+        default:
+            return state;
+    }
 }

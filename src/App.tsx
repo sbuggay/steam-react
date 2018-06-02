@@ -1,11 +1,14 @@
 import * as React from "react";
-import Profile from "./modules/Profile/components/Profile";
-import Library from "./modules/Library/components/Library";
+import Profile from "./components/Profile/Profile";
+import Library from "./components/Library/Library";
 
 import NavBar from "./components/NavBar";
 
-import { BrowserRouter, Route } from 'react-router-dom'
+import { Route } from "react-router-dom";
+import { ConnectedRouter } from "react-router-redux";
 
+import { Provider } from "react-redux";
+import store, { history } from "./redux/configureStore";
 
 class App extends React.Component<any, any> {
 
@@ -17,13 +20,15 @@ class App extends React.Component<any, any> {
 
   public render() {
     return (
-      <BrowserRouter>
-        <div style={this.getStyle()}>
-          <NavBar />
-          <Route path="/profile" component={Profile} />
-          <Route path="/library" component={Library} />
-        </div>
-      </BrowserRouter>
+      <Provider store={store}>
+        <ConnectedRouter history={history}>
+          <div style={this.getStyle()}>
+            <NavBar />
+            <Route path="/profile" component={Profile} />
+            <Route path="/library" component={Library} />
+          </div>
+        </ConnectedRouter>
+      </Provider>
     );
   }
 }

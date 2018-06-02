@@ -1,12 +1,29 @@
 import { createStore, applyMiddleware, combineReducers } from "redux";
-import logger from "redux-logger";
-import library from "./modules/library";
 
-const createStoreWithMiddleware = applyMiddleware(logger)(createStore);
+import createSagaMiddleware from "redux-saga";
+
+import library, { loadGameSaga, loadGameDetailSaga } from "./modules/library";
+// create the saga middleware
+
+import { routerMiddleware } from "react-router-redux";
+
+import logger from "redux-logger";
+import { createBrowserHistory } from "history";
+
+const sagaMiddleware = createSagaMiddleware()
 
 const reducer = combineReducers({
     library
 });
 
-const configureStore = (initialState: any) => createStoreWithMiddleware(reducer, initialState);
-export default configureStore;
+export const history = createBrowserHistory();
+
+const store = createStore(
+    reducer,
+    applyMiddleware(sagaMiddleware, logger, routerMiddleware(history))
+)
+
+sagaMiddleware.run(loadGameSaga);
+sagaMiddleware.run(loadGameDetailSaga);
+
+export default store;

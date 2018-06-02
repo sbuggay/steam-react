@@ -2,7 +2,6 @@ import * as moment from "moment";
 import * as React from "react";
 
 import RecentGames from "./RecentGames";
-import FriendList from "./FriendList";
 
 class Profile extends React.Component<any, any> {
 
@@ -24,7 +23,6 @@ class Profile extends React.Component<any, any> {
                     <div>Last seen {moment(player.lastlogoff * 1000).fromNow()}</div>
                     <div>{player.steamid}</div>
                     <RecentGames />
-                    <FriendList />
                 </div>
             );
         }
