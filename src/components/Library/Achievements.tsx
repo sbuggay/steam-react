@@ -7,6 +7,8 @@ class Achievements extends React.Component<any, any> {
             return null;
         }
 
+        console.log(this.props.data);
+
         return (
             <div id="Achievements">
                 <div style={{ textTransform: "uppercase", color: "#5993B0" }}>Achievements</div>

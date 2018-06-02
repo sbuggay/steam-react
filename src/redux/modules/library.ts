@@ -67,14 +67,19 @@ export function* loadGameList(action: any) {
 
 export function* loadGameDetail(action: any) {
     try {
-        const state = yield select(); 
+        const state = yield select();
         const appid = state.library.gameList[state.library.selected].appid;
-        const newsResponse = yield call(fetch, `http://localhost:8080/steamNews/${appid}`);
-        const news = yield call([newsResponse, "json"]);
-        const achievementsResponse = yield call(fetch, `http://localhost:8080/achievements/76561198020399899?appid=${appid}`);
-        const achievements = yield achievementsResponse.json();
-        console.log(news, achievements);
-        yield put({ type: LOAD_GAME_DETAIL_SUCCESS, payload: news.appnews });
+        const newsRes = yield call(fetch, `http://localhost:8080/steamNews/${appid}`);
+        const news = yield call([newsRes, "json"]);
+        const statsRes = yield call(fetch, `http://localhost:8080/achievements/76561198020399899?appid=${appid}`);
+        const stats = yield statsRes.json();
+
+        yield put({
+            type: LOAD_GAME_DETAIL_SUCCESS, payload: {
+                news: news.appnews,
+                playerstats: stats.playerstats
+            }
+        });
     } catch (e) {
         yield put({ type: LOAD_GAME_DETAIL_FAILURE });
     }
@@ -118,7 +123,10 @@ export default function reducer(state = initialState, action: any) {
         case LOAD_GAME_DETAIL_SUCCESS:
             return Object.assign({}, state, {
                 gameDetail: Object.assign({}, state.gameDetail, {
-                    [action.payload.appid]: action.payload.newsitems
+                    [action.payload.appid]: {
+                        news: action.payload.newsitems,
+                        stats: action.payload.playerstats
+                    }
                 })
             });
 
