@@ -76,6 +76,10 @@
     font-size: 16px;
 }
 
+#RecentNews a {
+    color: white;
+}
+
 #Achievements {
     margin-top: 10px;
     padding: 10px;

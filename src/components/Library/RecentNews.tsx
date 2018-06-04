@@ -12,7 +12,9 @@ class RecentNews extends React.Component<any, any> {
             return null;
         }
 
-        const recentNewsItems = this.props.data.map((item: any, i: any) => {
+        console.log(this.props.data);
+
+        const recentNewsItems = this.props.data.newsitems.map((item: any, i: any) => {
             return (
                 <div key={i} style={{ paddingBottom: "10px" }}>
                     <div>{item.title}</div>
@@ -26,8 +28,8 @@ class RecentNews extends React.Component<any, any> {
 
         return (
             <div id="RecentNews">
-                <div style={{ textTransform: "uppercase", color: "#5993B0" }}>Recent News</div>
-                {this.props.data.length > 0 ? recentNewsItems : <div>There is no news</div>}
+                <div style={{ textTransform: "uppercase", color: "#5993B0", paddingBottom: "10px" }}>Recent News</div>
+                {this.props.data.newsitems.length > 0 ? recentNewsItems : <div>There is no news</div>}
             </div>
         );
     }

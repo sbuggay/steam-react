@@ -69,7 +69,7 @@ class GameList extends React.Component<any, any> {
             const gameItems = Array.from(Array(100)).map((game: IGame, i: number) => {
                 return (
                     <li key={i} style={{ backgroundColor: "#151515" }}>
-                        <div>template</div>
+                        <div>_</div>
                     </li>
                 );
             });

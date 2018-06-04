@@ -1,4 +1,5 @@
-import { put, takeLatest, call, select } from 'redux-saga/effects'
+import { put, takeLatest, call, select } from "redux-saga/effects";
+
 interface INewsItem {
     gid: string;
     title: string;
@@ -57,7 +58,7 @@ export const LOAD_GAME_DETAIL_FAILURE = "LOAD_GAME_DETAIL";
 export function* loadGameList(action: any) {
     try {
         const response = yield call(fetch, `http://localhost:8080/gameList/${action.payload}`);
-        const json = yield call([response, "json"]);
+        const json = yield response.json();
         const games = json.response.games.sort((a: IGame, b: IGame) => (a.name <= b.name) ? -1 : 1);
         yield put({ type: LOAD_GAME_LIST_SUCCESS, payload: games });
     } catch (e) {
@@ -76,6 +77,7 @@ export function* loadGameDetail(action: any) {
 
         yield put({
             type: LOAD_GAME_DETAIL_SUCCESS, payload: {
+                appid,
                 news: news.appnews,
                 playerstats: stats.playerstats
             }
@@ -124,7 +126,7 @@ export default function reducer(state = initialState, action: any) {
             return Object.assign({}, state, {
                 gameDetail: Object.assign({}, state.gameDetail, {
                     [action.payload.appid]: {
-                        news: action.payload.newsitems,
+                        news: action.payload.news,
                         stats: action.payload.playerstats
                     }
                 })

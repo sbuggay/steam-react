@@ -23,9 +23,6 @@ class GameDetail extends React.Component<IGameDetailProps, any> {
 
         const game = data.game;
         const detail = data.detail;
-
-        console.log(detail);
-
         return (
             <div id="GameDetail">
                 <div className="Details">
@@ -43,8 +40,8 @@ class GameDetail extends React.Component<IGameDetailProps, any> {
                         </div>
                         <a style={{ marginRight: "20px", cursor: "pointer" }} href={`steam://run/${game.appid}`}><button>Play</button></a>
                     </div>
-                    <Achievements data={detail[game.appid].stats} />
-                    <RecentNews data={detail[game.appid].news} />
+                    {detail[game.appid] && detail[game.appid].stats ? <Achievements data={detail[game.appid].stats} /> : null}
+                    {detail[game.appid] && detail[game.appid].news ? <RecentNews data={detail[game.appid].news} /> : null}
                 </div>
                 <div id="Links">
                     <div style={{ color: "#5d9bb7", textTransform: "uppercase" }}>links</div>
