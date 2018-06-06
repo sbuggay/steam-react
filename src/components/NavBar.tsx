@@ -13,8 +13,8 @@ class Library extends React.Component {
 
         return (
             <div id="NavBar">
-                <img src="https://steamcommunity-a.akamaihd.net/public/shared/images/header/globalheader_logo.png?t=962016" width="176" height="44" />
-                {navLink("/store", "Store")}
+                <NavLink to={"/"}><img src="https://steamcommunity-a.akamaihd.net/public/shared/images/header/globalheader_logo.png?t=962016" width="176" height="44" /></NavLink>
+                {navLink("/", "Store")}
                 {navLink("/library", "Library")}
                 {navLink("/profile", "Profile")}
                 {navLink("/community", "Community")}

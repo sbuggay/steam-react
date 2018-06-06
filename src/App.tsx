@@ -28,7 +28,7 @@ class App extends React.Component<any, any> {
         <ConnectedRouter history={history}>
           <div style={this.getStyle()}>
             <NavBar />
-            <Route path="/store" component={Store} />
+            <Route exact={true} path="/" component={Store} />
             <Route path="/profile" component={Profile} />
             <Route path="/library" component={Library} />
             <Route path="/community" component={Community} />

@@ -24,7 +24,6 @@ class GameList extends React.Component<any, any> {
                 payload: "76561198020399899"
             });
         }
-
     }
 
     public handleOnClick(i: any) {
